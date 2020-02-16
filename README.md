@@ -23,6 +23,8 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [Getting Attendance](#getting-attendance)
 
+[Getting Gradebook](#getting-gradebook)
+
 ### Getting Zip Codes
 [Top](#TOC)
 
@@ -235,3 +237,70 @@ Vary: Accept-Encoding
 **Notes:**
 
 Uses `<methodName>Attendance</methodName>` and user credentials.
+
+### Getting Gradebook
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 625
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>Gradebook</methodName><paramStr>&lt;Parms&gt;&lt;ChildIntID&gt;0&lt;/ChildIntID&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 16 Feb 2020 05:41:23 GMT
+Content-Length: 27681
+Connection: close
+Set-Cookie: /* REDACTED */
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;Gradebook xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="Traditional" ErrorMessage="" HideStandardGraphInd="false" HideMarksColumnElementary="true" HidePointsColumnElementary="false" HidePercentSecondary="false" DisplayStandardsData="false" GBStandardsTabDefault="false"&gt;
+     &lt;ReportingPeriods&gt;
+          &lt;ReportPeriod Index="0" GradePeriod="P1" StartDate="8/19/2019" EndDate="9/27/2019" /&gt;
+          &lt;ReportPeriod Index="1" GradePeriod="P2" StartDate="9/28/2019" EndDate="11/8/2019" /&gt;
+          &lt;ReportPeriod Index="2" GradePeriod="P3/Fall" StartDate="11/9/2019" EndDate="12/20/2019" /&gt;
+          &lt;ReportPeriod Index="3" GradePeriod="P4" StartDate="12/21/2019" EndDate="2/21/2020" /&gt;
+          &lt;ReportPeriod Index="4" GradePeriod="P5" StartDate="2/22/2020" EndDate="4/17/2020" /&gt;
+          &lt;ReportPeriod Index="5" GradePeriod="P6/Spring" StartDate="4/18/2020" EndDate="6/2/2020" /&gt;
+     &lt;/ReportingPeriods&gt;
+     &lt;ReportingPeriod GradePeriod="P4" StartDate="12/21/2019" EndDate="2/21/2020" /&gt;
+     &lt;Courses&gt;
+          &lt;Course Period="7" Title="AP EngLngComp72 A (ELAC302A)" Room="135" Staff="Lael Bajet" StaffEMail="BajetL@sfusd.edu" StaffGU="379C7799-3331-4C75-A3A7-35B22CBE4C3F" HighlightPercentageCutOffForProgressBar="50"&gt;
+               &lt;Marks&gt;
+                    &lt;Mark MarkName="P4" CalculatedScoreString="A" CalculatedScoreRaw="90.5"&gt;
+                         &lt;StandardViews /&gt;
+                         &lt;GradeCalculationSummary /&gt;
+                         &lt;Assignments&gt;
+                              &lt;Assignment GradebookID="1637597" Measure="Inferno PPE: 3-8" Type="Essays and Projects" Date="2/14/2020" DueDate="2/24/2020" Score="A" ScoreType="Letter Grade" Points="50.00 / 50.0000" Notes="" TeacherID="273733" StudentID="312711" MeasureDescription="See GC" HasDropBox="false" DropStartDate="2/14/2020" DropEndDate="2/15/2020"&gt;
+                                   &lt;Resources /&gt;
+                                   &lt;Standards /&gt;
+                              &lt;/Assignment&gt;
+                              <!-- Continued -->
+                         &lt;/Assignments&gt;
+                    &lt;/Mark&gt;
+               &lt;/Marks&gt;
+          &lt;/Course&gt;
+          <!-- Continued -->
+     &lt;/Courses&gt;
+&lt;/Gradebook&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>Gradebook</methodName>` and user credentials.
