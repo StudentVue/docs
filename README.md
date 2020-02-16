@@ -25,6 +25,8 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [Getting Gradebook](#getting-gradebook)
 
+[Getting Class Notes](#getting-class-notes)
+
 ### Getting Zip Codes
 [Top](#TOC)
 
@@ -304,3 +306,44 @@ Vary: Accept-Encoding
 **Notes:**
 
 Uses `<methodName>Gradebook</methodName>` and user credentials.
+
+Optionally you can add `;&lt;ReportPeriod&gt;0&lt;/ReportPeriod&gt;` to `<paramStr>...</paramStr>` to get the gradebook for a specific reporting period, replacing the 0 with the index of the desired reporting period in the `<ReportingPeriods>...</ReportingPeriods>` field.
+
+### Getting Class Notes
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 631
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>StudentHWNotes</methodName><paramStr>&lt;Parms&gt;&lt;childIntID&gt;0&lt;/childIntID&gt; &lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 16 Feb 2020 06:20:43 GMT
+Content-Length: 726
+Connection: close
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;GBHWNotesDatas xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" StudentGU="F24B3988-C7F1-4FBC-AF8F-D8D376C54B97" sisNumber="20118247" StudentSSY="EDDE12BB-599F-4C17-AC54-E6A0064C7B02"&gt;
+     &lt;GBHomeWorkNotesRecords /&gt;
+&lt;/GBHWNotesDatas&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+My teachers don't use this feature, so I don't have a helpful example response.
