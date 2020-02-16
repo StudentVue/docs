@@ -17,6 +17,10 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [Getting Messages](#getting-messages)
 
+[Getting Calendar](#getting-calendar)
+
+[Getting Attendance](#getting-attendance)
+
 ### Getting Zip Codes
 [Top](#TOC)
 
@@ -109,6 +113,7 @@ Vary: Accept-Encoding
 Uses `<methodName>GetPXPMessages</methodName>` and user credentials.
 
 ### Getting Calendar
+[Top](#TOC)
 
 **Example Request:**
 ```xml
@@ -149,3 +154,82 @@ Vary: Accept-Encoding
 **Notes:**
 
 Uses `<methodName>StudentCalendar</methodName>` and user credentials.
+
+### Getting Attendance
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 626
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>Attendance</methodName><paramStr>&lt;Parms&gt;&lt;ChildIntID&gt;0&lt;/ChildIntID&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 16 Feb 2020 05:18:45 GMT
+Content-Length: 21374
+Connection: close
+Set-Cookie: TS01429a26=01b1c085daf3c86a3d80c981a8017e3f16f9ee73f72640e521854df81560345aae65e05f002cc7c4fd4dd4e2a225f8139bad0666668324867c56b7fe262463958a4a09eecf720866323207fe02a32480ecddd36a3c; Path=/
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;Attendance xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="Period" StartPeriod="0" EndPeriod="14" PeriodCount="15"&gt;
+     &lt;Absences&gt;
+          &lt;Absence AbsenceDate="01/28/2020" Reason="N/S" Note="" DailyIconName="icon_unexcused.gif"&gt;
+               &lt;Periods&gt;
+                    &lt;Period Number="2" Name="Unexcused" Reason="A" Course="AP Comp Sci A B" Staff="Arthur Simon" StaffEMail="SIMONA1@sfusd.edu" IconName="icon_unexcused.gif" SchoolName="Lowell HS" StaffGU="37E8254B-CFC0-4DEC-926C-CDCAEB238444" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+               &lt;/Periods&gt;
+          &lt;/Absence&gt;
+          &lt;Absence AbsenceDate="01/16/2020" Reason="N/S" Note="" DailyIconName="icon_excused.gif"&gt;
+               &lt;Periods&gt;
+                    &lt;Period Number="2" Name="Excused" Reason="E" Course="AP Comp Sci A B" Staff="Arthur Simon" StaffEMail="SIMONA1@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="37E8254B-CFC0-4DEC-926C-CDCAEB238444" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+                    &lt;Period Number="3" Name="Excused" Reason="E" Course="AP Physics 1B" Staff="Scott Dickerman" StaffEMail="DickermanS@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="51C4CDC4-6DB8-41E4-B9AB-CD91D15931EC" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+                    &lt;Period Number="4" Name="Excused" Reason="E" Course="AP Environ Sci B" Staff="Katherine Melvin" StaffEMail="MelvinK@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="E4020707-0794-42F6-A6A4-C5C9E6745891" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+                    &lt;Period Number="5" Name="Excused" Reason="E" Course="AP US History B" Staff="Christopher Watters" StaffEMail="WattersC@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="1FB15260-A238-405F-BF47-41C250E5899D" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+                    &lt;Period Number="7" Name="Excused" Reason="E" Course="AP EngLngComp72 A" Staff="Lael Bajet" StaffEMail="BajetL@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="379C7799-3331-4C75-A3A7-35B22CBE4C3F" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+                    &lt;Period Number="8" Name="Excused" Reason="E" Course="Pre-Calc B H" Staff="Wilson Sinn" StaffEMail="SinnW@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="615F1330-4138-4ED8-9EE3-F3AF18985B7C" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+                    &lt;Period Number="9" Name="Excused" Reason="E" Course="Homeroom" Staff="Carole Cadoppi" StaffEMail="CadoppiC@sfusd.edu" IconName="icon_excused.gif" SchoolName="Lowell HS" StaffGU="80A53656-ABDB-4208-9753-C012AF2C96D7" OrgYearGU="3EF9E4C8-35BA-48AE-810F-586E0B12E09E" /&gt;
+               &lt;/Periods&gt;
+          &lt;/Absence&gt;
+          <!-- Continued... -->
+     &lt;/Absences&gt;
+     &lt;TotalExcused&gt;
+          &lt;PeriodTotal Number="0" Total="0" /&gt;
+          <!-- Continued... -->
+     &lt;/TotalExcused&gt;
+     &lt;TotalTardies&gt;
+          &lt;PeriodTotal Number="0" Total="0" /&gt;
+          <!-- Continued... -->
+     &lt;/TotalTardies&gt;
+     &lt;TotalUnexcused&gt;
+          &lt;PeriodTotal Number="0" Total="0" /&gt;
+          <!-- Continued... -->
+     &lt;/TotalUnexcused&gt;
+     &lt;TotalActivities&gt;
+          &lt;PeriodTotal Number="0" Total="0" /&gt;
+          <!-- Continued... -->
+     &lt;/TotalActivities&gt;
+     &lt;TotalUnexcusedTardies&gt;
+          &lt;PeriodTotal Number="0" Total="0" /&gt;
+          <!-- Continued... -->
+     &lt;/TotalUnexcusedTardies&gt;
+&lt;/Attendance&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>Attendance</methodName>` and user credentials.
