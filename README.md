@@ -184,7 +184,7 @@ Content-Type: text/xml; charset=utf-8
 Date: Sun, 16 Feb 2020 05:18:45 GMT
 Content-Length: 21374
 Connection: close
-Set-Cookie: TS01429a26=01b1c085daf3c86a3d80c981a8017e3f16f9ee73f72640e521854df81560345aae65e05f002cc7c4fd4dd4e2a225f8139bad0666668324867c56b7fe262463958a4a09eecf720866323207fe02a32480ecddd36a3c; Path=/
+Set-Cookie: /* REDACTED */
 Vary: Accept-Encoding
 
 <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;Attendance xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="Period" StartPeriod="0" EndPeriod="14" PeriodCount="15"&gt;
