@@ -12,6 +12,8 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [kajchang/StudentVueDistrictFinder](https://github.com/kajchang/StudentVueDistrictFinder) - implements zip code finding and a dump of brute forced districts
 
+[loganMD/StudentVuePlus](https://studentvue.plus) - minimalist third-party StudentVue client
+
 ### TOC
 [Getting Zip Codes](#getting-zip-codes)
 
