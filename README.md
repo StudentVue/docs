@@ -27,6 +27,8 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [Getting Class Notes](#getting-class-notes)
 
+[Getting Student Info](#getting-student-info)
+
 ### Getting Zip Codes
 [Top](#TOC)
 
@@ -346,4 +348,78 @@ Vary: Accept-Encoding
 ```
 
 **Notes:**
+
+Uses `<methodName>StudentHWNotes</methodName>` and user credentials.
+
 My teachers don't use this feature, so I don't have a helpful example response.
+
+### Getting Student Info
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 627
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>StudentInfo</methodName><paramStr>&lt;Parms&gt;&lt;ChildIntID&gt;0&lt;/ChildIntID&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 16 Feb 2020 06:23:14 GMT
+Content-Length: 58162
+Connection: close
+Set-Cookie: /* REDACTED */
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;StudentInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="Detail"&gt;
+     &lt;LockerInfoRecords /&gt;
+     &lt;FormattedName&gt;/* REDACTED */&lt;/FormattedName&gt;
+     &lt;PermID&gt;/* REDACTED */&lt;/PermID&gt;
+     &lt;Gender&gt;/* REDACTED */&lt;/Gender&gt;
+     &lt;Grade&gt;/* REDACTED */&lt;/Grade&gt;
+     &lt;Address&gt;/* REDACTED */&lt;/Address&gt;
+     &lt;LastNameGoesBy /&gt;
+     &lt;NickName /&gt;
+     &lt;BirthDate&gt;/* REDACTED */&lt;/BirthDate&gt;
+     &lt;EMail&gt;/* REDACTED */&lt;/EMail&gt;
+     &lt;Phone&gt;/* REDACTED */&lt;/Phone&gt;
+     &lt;HomeLanguage /&gt;
+     &lt;CurrentSchool&gt;Lowell HS&lt;/CurrentSchool&gt;
+     &lt;Track /&gt;
+     &lt;HomeRoomTch&gt;Carole Cadoppi&lt;/HomeRoomTch&gt;
+     &lt;HomeRoomTchEMail&gt;CadoppiC@sfusd.edu&lt;/HomeRoomTchEMail&gt;
+     &lt;HomeRoomTchStaffGU&gt;80A53656-ABDB-4208-9753-C012AF2C96D7&lt;/HomeRoomTchStaffGU&gt;
+     &lt;OrgYearGU&gt;3EF9E4C8-35BA-48AE-810F-586E0B12E09E&lt;/OrgYearGU&gt;
+     &lt;HomeRoom&gt;2103&lt;/HomeRoom&gt;
+     &lt;CounselorName&gt;Wilson, Amber&lt;/CounselorName&gt;
+     &lt;Photo&gt;&lt;/Photo&gt;
+     &lt;EmergencyContacts /&gt;
+     &lt;Physician Name="" Hospital="" Phone="" Extn="" /&gt;
+     &lt;Dentist Name="" Office="" Phone="" Extn="" /&gt;
+     &lt;UserDefinedGroupBoxes&gt;
+          &lt;UserDefinedGroupBox GroupBoxLabel="Other Data"&gt;
+               &lt;UserDefinedItems&gt;
+                    &lt;UserDefinedItem ItemLabel="Counselor Name" ItemType="REV_EDIT_TEXT" Rev_Text="" SourceObject="0AFBF98B-3A86-4173-9BCC-E43C032ABEC4" SourceElement="CounselorFormattedName" VCID="211C518E-F1A8-4FBF-8C3D-3792541E4FE9" Value="Wilson, Amber" /&gt;
+               &lt;/UserDefinedItems&gt;
+          &lt;/UserDefinedGroupBox&gt;
+     &lt;/UserDefinedGroupBoxes&gt;
+&lt;/StudentInfo&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>StudentInfo</methodName>` and user credentials.
