@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
 python3 redact.py
-git add .
+git add README.md
+
