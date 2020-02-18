@@ -359,6 +359,9 @@ My teachers don't use this feature, so I don't have a helpful example response.
 **Example Request:**
 ```xml
 TBD
+```
+
+**Example Response:**
 ```xml
 TBD
 ```
@@ -374,6 +377,9 @@ Not all school districts use this feature.
 **Example Request:**
 ```xml
 TBD
+```
+
+**Example Response:**
 ```xml
 TBD
 ```
