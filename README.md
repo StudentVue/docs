@@ -27,6 +27,10 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [Getting Class Notes](#getting-class-notes)
 
+[Getting Student Mail](#getting-student-mail)
+
+[Composing/Sending Student Mail](#composingsending-student-mail)
+
 [Getting Student Info](#getting-student-info)
 
 ### Getting Zip Codes
@@ -352,6 +356,42 @@ Vary: Accept-Encoding
 Uses `<methodName>StudentHWNotes</methodName>` and user credentials.
 
 My teachers don't use this feature, so I don't have a helpful example response.
+
+### Composing/Sending Student Mail
+[Top](#TOC)
+
+**Example Request:**
+```xml
+TBD
+```
+
+**Example Response:**
+```xml
+TBD
+```
+
+**Notes:**
+COMING SOON
+
+Not all school districts use this feature.
+
+### Getting Student Mail
+[Top](#TOC)
+
+**Example Request:**
+```xml
+TBD
+```
+
+**Example Response:**
+```xml
+TBD
+```
+
+**Notes:**
+COMING SOON
+
+Not all school districts use this feature.
 
 ### Getting Student Info
 [Top](#TOC)
