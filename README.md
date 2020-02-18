@@ -353,6 +353,36 @@ Uses `<methodName>StudentHWNotes</methodName>` and user credentials.
 
 My teachers don't use this feature, so I don't have a helpful example response.
 
+### Composing/Sending Student Mail
+[Top](#TOC)
+
+**Example Request:**
+```xml
+TBD
+```xml
+TBD
+```
+
+**Notes:**
+COMING SOON
+
+Not all school districts use this feature.
+
+### Getting Student Mail
+[Top](#TOC)
+
+**Example Request:**
+```xml
+TBD
+```xml
+TBD
+```
+
+**Notes:**
+COMING SOON
+
+Not all school districts use this feature.
+
 ### Getting Student Info
 [Top](#TOC)
 
