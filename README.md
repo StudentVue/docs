@@ -27,6 +27,10 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 
 [Getting Class Notes](#getting-class-notes)
 
+[Getting Student Mail](#getting-student-mail)
+
+[Composing/Sending Student Mail](#composing-sending-student-mail)
+
 [Getting Student Info](#getting-student-info)
 
 ### Getting Zip Codes
