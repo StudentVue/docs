@@ -476,7 +476,7 @@ Vary: Accept-Encoding
 
 Uses `<methodName>StudentInfo</methodName>` and user credentials.
 
-### Geting Class Schedule
+### Getting Class Schedule
 [Top](#TOC)
 
 **Example Request:**
