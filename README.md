@@ -2,13 +2,11 @@
 
 Documentation and research of the API routes from the Official StudentVue App.
 
-On a high level, the app uses [SOAP](https://en.wikipedia.org/wiki/SOAP), and the authentication scheme for the main web service (`ProcessWebServiceRequest`) is through the `userID` and  `password` fields.
-
-One weird observation is that "open" routes seem to use a mix of system accounts and blank credentials. Additionally, although the app has cookie persistence, usernames and passwords are stored and provided with every request. `<` and `>` characters also seem to be escaped inconsistently, but that just might be a product of the way I'm logging responses.
+The app uses [SOAP](https://en.wikipedia.org/wiki/SOAP), and the authentication scheme for the main web service (`ProcessWebServiceRequest`) is through the `userID` and  `password` fields.
 
 ### Related Projects
 
-[kajchang/StudentVue](https://github.com/kajchang/StudentVue) - unofficial Python implementation of the web API
+[kajchang/StudentVue](https://github.com/kajchang/StudentVue) - unofficial Python implementation of the web and SOAP APIs
 
 [kajchang/StudentVueDistrictFinder](https://github.com/kajchang/StudentVueDistrictFinder) - implements zip code finding and a dump of brute forced districts
 
@@ -32,6 +30,20 @@ One weird observation is that "open" routes seem to use a mix of system accounts
 [Composing/Sending Student Mail](#composingsending-student-mail)
 
 [Getting Student Info](#getting-student-info)
+
+[Getting Class Schedule](#getting-class-schedule)
+
+[Getting School Info](#getting-school-info)
+
+[Getting Class Websites](#getting-class-websites)
+
+[Listing Report Cards](#listing-report-cards)
+
+[Getting a Specific Report Card](#getting-a-specific-report-card)
+
+[Listing Documents](#listing-documents)
+
+[Getting a Specific Document](#getting-a-specific-document)
 
 ### Getting Zip Codes
 [Top](#TOC)
@@ -313,7 +325,7 @@ Vary: Accept-Encoding
 
 Uses `<methodName>Gradebook</methodName>` and user credentials.
 
-Optionally you can add `;&lt;ReportPeriod&gt;0&lt;/ReportPeriod&gt;` to `<paramStr>...</paramStr>` to get the gradebook for a specific reporting period, replacing the 0 with the index of the desired reporting period in the `<ReportingPeriods>...</ReportingPeriods>` field.
+Optionally you can use the `ReportPeriod` parameter with the index of the desired reporting period in the `<ReportingPeriods>...</ReportingPeriods>` field to get the gradebook for a reporting period.
 
 ### Getting Class Notes
 [Top](#TOC)
@@ -463,3 +475,295 @@ Vary: Accept-Encoding
 **Notes:**
 
 Uses `<methodName>StudentInfo</methodName>` and user credentials.
+
+### Geting Class Schedule
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 670
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>StudentClassList</methodName><paramStr>&lt;Parms&gt;&lt;childIntID&gt;0&lt;/childIntID&gt; &lt;TermIndex&gt;1&lt;/TermIndex&gt; &lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 22 Mar 2020 17:19:04 GMT
+Content-Length: 3963
+Connection: close
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;StudentClassSchedule xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TermIndex="1" TermIndexName="Spring" ErrorMessage=""&gt;
+     &lt;ClassLists&gt;
+          &lt;ClassListing Period="2" CourseTitle="AP Comp Sci A B" RoomName="334" Teacher="Arthur Simon" TeacherEmail="SIMONA1@sfusd.edu" SectionGU="2549B62B-A20A-4A0C-A203-ECDE3EB0C8BE" TeacherStaffGU="37E8254B-CFC0-4DEC-926C-CDCAEB238444"&gt;
+               &lt;AdditionalStaffInformationXMLs /&gt;
+          &lt;/ClassListing&gt;
+          <!-- Continued -->
+     &lt;/ClassLists&gt;
+     &lt;TermLists&gt;
+          &lt;TermListing TermIndex="0" TermCode="1" TermName="Fall" BeginDate="08/19/2019" EndDate="12/20/2019" SchoolYearTrmCodeGU="7E09DC1F-D40F-4284-9F7F-8C226827AEF1"&gt;
+               &lt;TermDefCodes&gt;
+                    &lt;TermDefCode TermDefName="S1" /&gt;
+                    &lt;TermDefCode TermDefName="FY" /&gt;
+               &lt;/TermDefCodes&gt;
+          &lt;/TermListing&gt;
+          <!-- Continued -->
+     &lt;/TermLists&gt;
+     &lt;ConcurrentSchoolStudentClassSchedules /&gt;
+&lt;/StudentClassSchedule&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>StudentClassList</methodName>` and user credentials.
+
+Optionally you can use the `TermIndex` parameter with the index of the desired term in the `<TermLists>...</TermLists>` field to get the schedule for a specific term.
+
+### Getting School Info
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 633
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>StudentSchoolInfo</methodName><paramStr>&lt;Parms&gt;&lt;childIntID&gt;0&lt;/childIntID&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 22 Mar 2020 17:23:11 GMT
+Content-Length: 3303
+Connection: close
+Set-Cookie: /* REDACTED */
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;StudentSchoolInfoListing xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" School="Lowell HS" Principal="Dacotah Swett" SchoolAddress="1101 Eucalyptus Dr" SchoolAddress2="" SchoolCity="San Francisco" SchoolState="CA" SchoolZip="94132" Phone="415-759-2730" Phone2="415-759-2742" URL="http://lhs.sfusd.edu"&gt;
+     &lt;StaffLists&gt;
+          &lt;StaffList Name="Aguirre, Maria" EMail="AguirreM1@sfusd.edu" Title="0923-Counselor" Phone="" Extn="" StaffGU="9C7EF45E-2C8F-4A70-822B-D5EE466653F5" /&gt;
+					<!-- Continued -->
+     &lt;/StaffLists&gt;
+&lt;/StudentSchoolInfoListing&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>StudentSchoolInfo</methodName>` and user credentials.
+
+### Getting Class Websites
+[Top](#TOC)
+
+**Example Request:**
+```xml
+```
+
+**Example Response:**
+```xml
+```
+
+**Notes:**
+
+TODO
+
+### Listing Report Cards
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 640
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>GetReportCardInitialData</methodName><paramStr>&lt;Parms&gt;&lt;childIntID&gt;0&lt;/childIntID&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 22 Mar 2020 17:26:03 GMT
+Content-Length: 1622
+Connection: close
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;RCReportingPeriodData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+     &lt;RCReportingPeriods&gt;
+          &lt;RCReportingPeriod ReportingPeriodGU="0F5168E9-67CE-4481-BD60-980AD910D5FB" ReportingPeriodName="P1" EndDate="09/27/2019" Message="Click here to view report card for  P1" DocumentGU="/* REDACTED */" /&gt;
+          <!-- Continued -->
+     &lt;/RCReportingPeriods&gt;
+&lt;/RCReportingPeriodData&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>GetReportCardInitialData</methodName>` and user credentials.
+
+### Getting a Specific Report Card
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 676
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>GetReportCardDocumentData</methodName><paramStr>&lt;Parms&gt;&lt;DocumentGU&gt;/* REDACTED */&lt;/DocumentGU&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 22 Mar 2020 17:27:06 GMT
+Content-Length: 10182
+Connection: close
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;DocumentData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" DocumentGU="/* REDACTED */" FileName="/* REDACTED */" DocFileName="/* REDACTED */" DocType="PDF"&gt;
+     &lt;Base64Code&gt;/* REDACTED */&lt;/Base64Code&gt;
+&lt;/DocumentData&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>GetReportCardDocumentData</methodName>` and user credentials.
+
+Use the `DocumentGU` parameter to specify the document that you want.
+
+### Listing Documents
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 645
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>GetStudentDocumentInitialData</methodName><paramStr>&lt;Parms&gt;&lt;childIntID&gt;0&lt;/childIntID&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 22 Mar 2020 17:29:05 GMT
+Content-Length: 3661
+Connection: close
+Set-Cookie: /* REDACTED */
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;StudentDocuments xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" showDateColumn="true" showDocNameColumn="true" showDocCatColumn="true" StudentGU="F24B3988-C7F1-4FBC-AF8F-D8D376C54B97" StudentSSY="EDDE12BB-599F-4C17-AC54-E6A0064C7B02"&gt;
+     &lt;StudentDocumentDatas&gt;
+          &lt;StudentDocumentData DocumentGU="/* REDACTED */" DocumentFileName="/* REDACTED */" DocumentDate="02/27/2020" DocumentType="Report Card" StudentGU="F24B3988-C7F1-4FBC-AF8F-D8D376C54B97" DocumentComment="2019-2020 P4" /&gt;
+          <!-- Continued -->
+     &lt;/StudentDocumentDatas&gt;
+&lt;/StudentDocuments&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>GetStudentDocumentInitialData</methodName>` and user credentials.
+
+### Getting a Specific Document
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST //Service/PXPCommunication.asmx HTTP/1.1
+Host: portal.sfusd.edu
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequest
+Connection: close
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 674
+Accept-Encoding: gzip, deflate
+User-Agent: StudentVUE/8.0.26 CFNetwork/1121.2.2 Darwin/19.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequest xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>GetContentOfAttachedDoc</methodName><paramStr>&lt;Parms&gt;&lt;DocumentGU&gt;/* REDACTED */&lt;/DocumentGU&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequest></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Date: Sun, 22 Mar 2020 17:29:19 GMT
+Content-Length: 10438
+Connection: close
+Vary: Accept-Encoding
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestResult>&lt;StudentAttachedDocumentData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+     &lt;DocumentCategoryLookups /&gt;
+     &lt;DocumentDatas&gt;
+          &lt;DocumentData DocumentGU="/* REDACTED */" StudentGU="F24B3988-C7F1-4FBC-AF8F-D8D376C54B97" DocDate="02/27/2020" FileName="/* REDACTED */" Category="04" Notes="2019-2020 P4" DocType="PDF"&gt;
+               &lt;Base64Code&gt;/* REDACTED */&lt;/Base64Code&gt;
+          &lt;/DocumentData&gt;
+     &lt;/DocumentDatas&gt;
+&lt;/StudentAttachedDocumentData&gt;</ProcessWebServiceRequestResult></ProcessWebServiceRequestResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>GetReportCardDocumentData</methodName>` and user credentials.
+
+Use the `DocumentGU` parameter to specify the document that you want.
