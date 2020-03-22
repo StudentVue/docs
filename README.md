@@ -764,6 +764,6 @@ Vary: Accept-Encoding
 
 **Notes:**
 
-Uses `<methodName>GetReportCardDocumentData</methodName>` and user credentials.
+Uses `<methodName>GetContentOfAttachedDoc</methodName>` and user credentials.
 
 Use the `DocumentGU` parameter to specify the document that you want.
