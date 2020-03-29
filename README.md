@@ -8,7 +8,9 @@ The app uses [SOAP](https://en.wikipedia.org/wiki/SOAP), and the authentication 
 
 [StudentVue-Community/StudentVue](https://github.com/StudentVue-Community/StudentVue) - unofficial Python implementation of the web and SOAP APIs
 
-[StudentVue-Community/StudentVueDistrictFinder](https://github.com/StudentVue-Community/StudentVueDistrictFinder) - implements zip code finding and a dump of brute forced districts
+[StudentVue-Community/StudentVue.js](https://github.com/StudentVue-Community/StudentVue.js) - unofficial Javascript implementation of the SOAP API
+
+[StudentVue-Community/DistrictFinder](https://github.com/StudentVue-Community/DistrictFinder) - implements zip code finding and a dump of brute forced districts
 
 [loganMD/StudentVuePlus](https://studentvue.plus) - minimalist third-party StudentVue client
 
