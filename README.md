@@ -37,6 +37,13 @@ The app uses [SOAP](https://en.wikipedia.org/wiki/SOAP), and the authentication 
 
 [Getting a Specific Document](#getting-a-specific-document)
 
+[Getting a Message Attachment](#getting-a-message-attachment)
+
+[Marking a Message as Read](#marking-a-message-as-read)
+
+[Getting Student Health Info](#getting-student-health-info)
+
+
 ### Getting Zip Codes
 [Top](#TOC)
 
@@ -759,3 +766,144 @@ Vary: Accept-Encoding
 Uses `<methodName>GetContentOfAttachedDoc</methodName>` and user credentials.
 
 Use the `DocumentGU` parameter to specify the document that you want.
+
+### Getting a Message Attachment
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST /Service/PXPCommunication.asmx HTTP/1.1
+Host: student.tusd1.org
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequestMultiWeb
+Connection: keep-alive
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 764
+Accept-Encoding: gzip, deflate, br
+User-Agent: StudentVUE/9.1.8 CFNetwork/1220.1 Darwin/20.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequestMultiWeb xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webDBName></webDBName><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>SynergyMailGetAttachment</methodName><paramStr>&lt;Parms&gt;&lt;childIntID&gt;&lt;/childIntID&gt;&lt;SmAttachmentGU&gt;/* REDACTED */&lt;/SmAttachmentGU&gt;&lt;/Parms&gt;</paramStr></ProcessWebServiceRequestMultiWeb></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Server: Microsoft-IIS/8.5
+Access-Control-Allow-Origin: *
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Thu, 22 Jul 2021 05:52:47 GMT
+Content-Length: 86098
+Connection: keep-alive
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestMultiWebResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestMultiWebResult>&lt;AttachmentXML xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" DocumentName="/* REDACTED */"&gt;
+&lt;Base64Code&gt;/* REDACTED */&lt;/Base64Code&gt;
+&lt;/AttachmentXML&gt;</ProcessWebServiceRequestMultiWebResult></ProcessWebServiceRequestMultiWebResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+
+Uses `<methodName>SynergyMailGetAttachment</methodName>` and user credentials.
+
+Use the `SmAttachmentGU` parameter to specify the attachment that you want.
+
+Only tested with messages so far, not student mail.
+
+
+### Marking a Message as Read
+[Top](#TOC)
+
+**Example Request:**
+```xml
+POST /Service/PXPCommunication.asmx HTTP/1.1
+Host: student.tusd1.org
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequestMultiWeb
+Connection: keep-alive
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 1020
+Accept-Encoding: gzip, deflate, br
+User-Agent: StudentVUE/9.1.8 CFNetwork/1220.1 Darwin/20.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequestMultiWeb xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webDBName></webDBName><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>UpdatePXPMessage</methodName><paramStr>&lt;Parms&gt;&lt;MessageListing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"           IconURL="images/PXP/TchComment_S.gif"    ID="31E9E442-7087-4DF3-AF2B-51B596D3F3E9"    BeginDate="08/07/2020 16:02:00"    Type="StudentActivity"    Deletable="true"    Read="true"    From="/* REDACTED */"    MarkAsRead="true"    &gt;&lt;/MessageListing&gt;&lt;/Parms&gt; </paramStr></ProcessWebServiceRequestMultiWeb></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: text/xml; charset=utf-8
+Server: Microsoft-IIS/8.5
+Access-Control-Allow-Origin: *
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Thu, 22 Jul 2021 05:49:44 GMT
+Content-Length: 498
+Connection: keep-alive
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestMultiWebResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestMultiWebResult>&lt;Update&gt;Message updated.&lt;/Update&gt;</ProcessWebServiceRequestMultiWebResult></ProcessWebServiceRequestMultiWebResponse></soap:Body></soap:Envelope>
+```
+
+**Notes:**
+Uses `<methodName>UpdatePXPMessage</methodName>` and user credentials.
+
+Uses MessageListing properties to specify the message, and MarkAsRead to mark it as read.
+
+Only needs ID, Type, and MarkAsRead (deletable, read, and from are optional). 
+ 
+
+### Getting Student Health Info
+[Top](#TOC)
+
+**Example Request:**
+```xml
+
+POST /Service/PXPCommunication.asmx HTTP/1.1
+Host: student.tusd1.org
+Accept: */*
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://edupoint.com/webservices/ProcessWebServiceRequestMultiWeb
+Connection: keep-alive
+Cookie: /* REDACTED */
+Accept-Language: en-us
+Content-Length: 840
+Accept-Encoding: gzip, deflate, br
+User-Agent: StudentVUE/9.1.8 CFNetwork/1220.1 Darwin/20.3.0
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ProcessWebServiceRequestMultiWeb xmlns="http://edupoint.com/webservices/"><userID>/* REDACTED */</userID><password>/* REDACTED */</password><skipLoginLog>1</skipLoginLog><parent>0</parent><webDBName></webDBName><webServiceHandleName>PXPWebServices</webServiceHandleName><methodName>StudentHealthInfo</methodName><paramStr>&lt;Parms&gt;&lt;ChildIntID&gt;0&lt;/ChildIntID&gt; &lt;HealthConditions&gt;false&lt;/HealthConditions&gt; &lt;HealthVisits&gt;false&lt;/HealthVisits&gt; &lt;HealthImmunizations&gt;true&lt;/HealthImmunizations&gt; &lt;/Parms&gt;</paramStr></ProcessWebServiceRequestMultiWeb></soap:Body></soap:Envelope>
+```
+
+**Example Response:**
+```xml
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessWebServiceRequestMultiWebResponse xmlns="http://edupoint.com/webservices/"><ProcessWebServiceRequestMultiWebResult>&lt;StudentHealthData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+     &lt;HealthVisitListings /&gt;
+     &lt;HealthConditionsListings /&gt;
+     &lt;HealthImmunizationListings&gt;
+          &lt;HealthImmunizationListing AccessGU="/* REDACTED */" Compliant="true" CompliantMessage="Compliant" Name="/* REDACTED */" NumReqDoses="6"&gt;
+               &lt;ImmunizationDatesData&gt;
+                    &lt;ImmunizationDate ImmunizationDt="/* REDACTED */" /&gt;
+                    <!-- Continued... -->
+               &lt;/ImmunizationDatesData&gt;
+          &lt;/HealthImmunizationListing&gt;
+           <!-- Continued... -->
+     &lt;/HealthImmunizationListings&gt;
+&lt;/StudentHealthData&gt;</ProcessWebServiceRequestMultiWebResult></ProcessWebServiceRequestMultiWebResponse></soap:Body></soap:Envelope>
+
+```
+
+**Notes:**
+Uses `<methodName>StudentHealthInfo</methodName>` and user credentials.
+
+Use the parameters HealthConditions, HealthVisits, and HealthImmunizations, to specify what data to get. Not all districts have all of these enabled. 
